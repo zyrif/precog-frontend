@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-content>
-      <h1> Deferred </h1>
+      <h1> App.vue </h1>
     </v-content>
   </v-app>
 </template>
