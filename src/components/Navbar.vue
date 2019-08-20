@@ -17,7 +17,7 @@
             <v-list nav>
                 <v-list-item v-ripple v-for="item in drawerItems" v-bind:key="item.title" router v-bind:to="item.route" active-class="white--text">
                     <v-list-item-icon>
-                        <v-icon v-text="item.icon" ></v-icon>
+                        <v-icon dark> {{ item.icon }}</v-icon>
                     </v-list-item-icon>
 
                     <v-list-item-content>
@@ -35,10 +35,10 @@ export default {
         return {
             drawer: false,
             drawerItems: [
-                {icon: 'mdi-dashboard', title: 'Dashboard', route: '/'},
-                {icon: 'mdi-dashboard', title: 'Deferred', route: '/deferred'},
-                {icon: 'mdi-dashboard', title: 'Realtime', route: '/realtime'},
-                {icon: 'mdi-dashboard', title: 'Settings', route: '/settings'},
+                {icon: 'mdi-view-dashboard-outline', title: 'Dashboard', route: '/'},
+                {icon: 'mdi-content-save-outline', title: 'Deferred', route: '/deferred'},
+                {icon: 'mdi-monitor', title: 'Realtime', route: '/realtime'},
+                {icon: 'mdi-settings-outline', title: 'Settings', route: '/settings'},
             ]
         }
     },
