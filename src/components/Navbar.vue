@@ -3,6 +3,7 @@
     <v-app-bar
       app
       flat
+      short
     >
       <v-app-bar-nav-icon
         class="grey--text"
@@ -28,6 +29,7 @@
       v-model="drawer"
       app
       dark
+      temporary
       class="blue"
     >
       <v-list nav>

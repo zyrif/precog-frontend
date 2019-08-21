@@ -27,7 +27,7 @@
             <v-form>
               <v-file-input
                 v-model="video_file"
-                class="mt-7"
+                class="mt-6"
                 color="blue"
                 show-size
                 accept="video/*"
