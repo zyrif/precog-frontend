@@ -40,7 +40,9 @@
           active-class="white--text"
         >
           <v-list-item-icon>
-            <v-icon dark> {{ item.icon }}</v-icon>
+            <v-icon dark>
+              {{ item.icon }}
+            </v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
