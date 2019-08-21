@@ -35,6 +35,7 @@
                 placeholder="Select Video File"
                 prepend-icon="mdi-movie-outline"
                 outlined
+                v-bind="inputOptions"
                 v-bind:display-size="1000"
               >
                 <template v-slot:selection="{ text }">
@@ -53,12 +54,12 @@
           <v-card-actions>
             <v-spacer />
             <v-btn
-              class="mb-2"
-              dark
+              class="mb-2 white--text"
               depressed
               block
               large
               color="blue"
+              v-bind="btnOptions"
               v-on:click="processUpload"
             >
               Upload
@@ -75,15 +76,63 @@
   export default {
     data () {
       return {
-        video_file: null
+        video_file: null,
+
+        // File Input options
+        inputIsLoading: false,
+        inputIsSuccess: false,
+        inputMessages: [],
+        inputSuccessMessages: [],
+
+        // Button options
+        btnIsLoading: false,
+        btnIsDisabled: false
+
+      }
+    },
+    computed: {
+      inputOptions () {
+        const options = {
+          loading: this.inputIsLoading,
+          messages: this.inputMessages,
+          success: this.inputIsSuccess,
+          successMessages: this.inputSuccessMessages
+        }
+        return options
+      },
+      btnOptions () {
+        const options = {
+          loading: this.btnIsLoading,
+          disabled: this.btnIsDisabled
+        }
+        return options
       }
     },
     methods: {
       processUpload () {
         if (this.video_file == null) {
-          console.debug('No File')
+          this.inputMessages = 'No File'
+
+          setTimeout(() => {
+            this.inputMessages = []
+          }, 2000)
         } else {
-          console.debug('Video size: ' + this.video_file.size)
+          this.inputIsLoading = true
+          this.btnIsDisabled = true
+
+          setTimeout(() => {
+            this.inputIsLoading = false
+            this.btnIsDisabled = false
+
+            // success condtion
+            this.inputIsSuccess = true
+            this.inputSuccessMessages = 'File Upload Succeeded!'
+
+            setTimeout(() => {
+              this.inputIsSuccess = false
+              this.inputSuccessMessages = []
+            }, 3000)
+          }, 5000)
         }
       }
     }
