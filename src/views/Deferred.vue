@@ -1,11 +1,15 @@
 <template>
-    <div class="display-4 font-weight-black">
-        Deferred
-    </div>
+  <div>
+    <file-upload />
+  </div>
 </template>
 
 <script>
-export default {
-    
-}
+  import FileUpload from '@/components/FileUpload.vue'
+
+  export default {
+    components: {
+      FileUpload
+    }
+  }
 </script>
