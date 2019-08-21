@@ -1,11 +1,11 @@
 <template>
-   <div class="display-4 font-weight-black">
-        Realtime
-    </div>
+  <div class="display-4 font-weight-black">
+    Realtime
+  </div>
 </template>
 
 <script>
-export default {
-    
-}
+  export default {
+    //
+  }
 </script>

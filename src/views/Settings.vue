@@ -1,9 +1,11 @@
 <template>
-    <div></div>
+  <div>
+    <p />
+  </div>
 </template>
 
 <script>
-export default {
-    
-}
+  export default {
+    //
+  }
 </script>
