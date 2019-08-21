@@ -20,7 +20,7 @@
             flat
           >
             <v-toolbar-title>
-              Upload Pre-recorded Video
+              Upload Pre-Recorded Video
             </v-toolbar-title>
           </v-toolbar>
           <v-card-text>
@@ -31,8 +31,8 @@
                 color="blue"
                 show-size
                 accept="video/*"
-                label="Video File Input"
-                placeholder="Select Video File"
+                label="Select Video File"
+                placeholder="Click Here to Select"
                 prepend-icon="mdi-movie-outline"
                 outlined
                 v-bind="inputOptions"
@@ -111,7 +111,7 @@
     methods: {
       processUpload () {
         if (this.video_file == null) {
-          this.inputMessages = 'No File'
+          this.inputMessages = 'No File to Upload'
 
           setTimeout(() => {
             this.inputMessages = []
