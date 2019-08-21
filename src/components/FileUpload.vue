@@ -27,6 +27,7 @@
             <v-form>
               <v-file-input
                 v-model="video_file"
+                class="mt-7"
                 color="blue"
                 show-size
                 accept="video/*"
@@ -49,6 +50,21 @@
               </v-file-input>
             </v-form>
           </v-card-text>
+          <v-card-actions>
+            <v-spacer />
+            <v-btn
+              class="mb-2"
+              dark
+              depressed
+              block
+              large
+              color="blue"
+              v-on:click="processUpload"
+            >
+              Upload
+            </v-btn>
+            <v-spacer />
+          </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
@@ -57,6 +73,19 @@
 
 <script>
   export default {
-
+    data () {
+      return {
+        video_file: null
+      }
+    },
+    methods: {
+      processUpload () {
+        if (this.video_file == null) {
+          console.debug('No File')
+        } else {
+          console.debug('Video size: ' + this.video_file.size)
+        }
+      }
+    }
   }
 </script>
