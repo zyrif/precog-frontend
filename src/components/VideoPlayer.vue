@@ -1,0 +1,22 @@
+<template>
+  <v-container>
+    <v-row
+      justify="center"
+    >
+      <v-col
+        cols="12"
+        xs="12"
+        sm="9"
+        md="8"
+        lg="6"
+        xl="4"
+      >
+        <video
+          width="100%"
+          controls
+          src="http://techslides.com/demos/sample-videos/small.mp4"
+        />
+      </v-col>
+    </v-row>
+  </v-container>
+</template>
