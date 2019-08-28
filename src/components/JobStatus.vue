@@ -36,8 +36,29 @@
 </template>
 
 <script>
+  import { mapState, mapMutations } from 'vuex'
+
   export default {
-    //
+    computed: {
+      ...mapState([
+        'deferredStatus'
+      ])
+    },
+
+    mounted () {
+      // manually emulating success condition
+      // by setting status to completed
+      // this value will be set from the output of api
+      setTimeout(() => {
+        this.setDeferredStatus({ status: 'completed' })
+      }, 5000)
+    },
+
+    methods: {
+      ...mapMutations([
+        'setDeferredStatus'
+      ])
+    }
   }
 </script>
 

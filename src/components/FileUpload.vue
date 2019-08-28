@@ -73,6 +73,9 @@
 </template>
 
 <script>
+
+  import { mapState, mapMutations } from 'vuex'
+
   export default {
     data () {
       return {
@@ -106,7 +109,13 @@
           disabled: this.btnIsDisabled
         }
         return options
-      }
+      },
+
+      // map vuex state
+      ...mapState([
+        'deferredId',
+        'deferredStatus'
+      ])
     },
     methods: {
       processUpload () {
@@ -131,10 +140,20 @@
             setTimeout(() => {
               this.inputIsSuccess = false
               this.inputSuccessMessages = []
-            }, 3000)
+
+              // manually set status to 'uploaded' for now
+              // this will be set according to the api return later
+              this.setDeferredStatus({ status: 'uploaded' })
+            }, 1000)
           }, 5000)
         }
-      }
+      },
+
+      // map vuex mutations
+      ...mapMutations([
+        'setDeferredId',
+        'setDeferredStatus'
+      ])
     }
   }
 </script>
