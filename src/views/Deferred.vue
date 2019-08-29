@@ -25,9 +25,12 @@
 
     computed: {
       currentComponent () {
-        if (this.deferredStatus == 'uploaded') {
+        if (this.deferredStatus === 'uploaded' ||
+          this.deferredStatus === 'processing' ||
+          this.deferredStatus === 'initializing' ||
+          this.deferredStatus === 'error') {
           return 'JobStatus'
-        } else if (this.deferredStatus == 'completed') {
+        } else if (this.deferredStatus === 'completed') {
           return 'VideoPlayer'
         } else {
           return 'FileUpload'

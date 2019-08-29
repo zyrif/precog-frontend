@@ -74,6 +74,7 @@
 
 <script>
 
+  import axios from 'axios'
   import { mapState, mapMutations } from 'vuex'
 
   export default {
@@ -114,7 +115,8 @@
       // map vuex state
       ...mapState([
         'deferredId',
-        'deferredStatus'
+        'deferredStatus',
+        'deferredAPIUrl'
       ])
     },
     methods: {
@@ -129,23 +131,58 @@
           this.inputIsLoading = true
           this.btnIsDisabled = true
 
-          setTimeout(() => {
-            this.inputIsLoading = false
-            this.btnIsDisabled = false
+          let uploadFormData = new FormData()
+          uploadFormData.append('video_file', this.video_file)
 
-            // success condtion
-            this.inputIsSuccess = true
-            this.inputSuccessMessages = 'File Upload Succeeded!'
+          axios
+            .post(this.deferredAPIUrl, uploadFormData, {
+              headers: {
+                'Content-type': 'multipart/form-data'
+              }
+            })
+            .then(
+              (response) => {
+                this.inputIsLoading = false
+                this.btnIsDisabled = false
 
-            setTimeout(() => {
-              this.inputIsSuccess = false
-              this.inputSuccessMessages = []
+                if (response.status === 201) {
+                  this.inputIsSuccess = true
+                  this.inputSuccessMessages = 'File Upload Succeeded!'
 
-              // manually set status to 'uploaded' for now
-              // this will be set according to the api return later
-              this.setDeferredStatus({ status: 'uploaded' })
-            }, 1000)
-          }, 5000)
+                  setTimeout(() => {
+                    // eslint-disable-next-line
+                    console.log('Job id: ' + response.data.id)  // temp
+                    this.setDeferredId({ id: response.data.id })
+                    this.setDeferredStatus({ status: response.data.status })
+                  }, 1000)
+                } else {
+                  // eslint-disable-next-line
+                  console.log(response)
+                }
+              }
+            )
+            .catch(
+              // eslint-disable-next-line
+              (error) => console.error(error)
+            )
+
+          // setTimeout(() => {
+          //   this.inputIsLoading = false
+          //   this.btnIsDisabled = false
+
+          //   // success condtion
+          //   this.inputIsSuccess = true
+          //   this.inputSuccessMessages = 'File Upload Succeeded!'
+
+          //   setTimeout(() => {
+          //     this.inputIsSuccess = false
+          //     this.inputSuccessMessages = []
+
+          //     // manually set status to 'uploaded' for now
+          //     // this will be set according to the api return later
+          //     this.setDeferredStatus({ status: 'uploaded' })
+          //   }, 1000)
+          // }, 5000)
         }
       },
 

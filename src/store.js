@@ -6,9 +6,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     deferredId: -1,
+    deferredVideoUid: '',
     deferredStatus: 'ready',
-
-    deferredVideoUrl: ''
+    deferredAPIUrl: 'http://localhost:8000/api/video/'
   },
   mutations: {
     setDeferredId (state, payload) {
@@ -17,6 +17,9 @@ export default new Vuex.Store({
 
     setDeferredStatus (state, payload) {
       state.deferredStatus = payload.status
+    },
+    setDeferredVideoUid (state, payload) {
+      state.deferredVideoUid = payload.deferredVideoUid
     }
   },
   actions: {

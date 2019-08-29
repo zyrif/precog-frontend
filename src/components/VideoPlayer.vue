@@ -14,9 +14,26 @@
         <video
           width="100%"
           controls
-          src="http://techslides.com/demos/sample-videos/small.mp4"
+          v-bind:src="deferredVideoUrl"
         />
       </v-col>
     </v-row>
   </v-container>
 </template>
+
+<script>
+
+  import { mapState } from 'vuex'
+
+  export default {
+    computed: {
+      ...mapState([
+        'deferredAPIUrl',
+        'deferredVideoUid'
+      ]),
+      deferredVideoUrl () {
+        return this.deferredAPIUrl + this.deferredVideoUid
+      }
+    }
+  }
+</script>
