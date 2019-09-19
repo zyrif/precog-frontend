@@ -1,20 +1,22 @@
 <template>
   <v-app>
+    <nav-bar />
     <v-content>
-      <h1> Deferred </h1>
+      <router-view />
     </v-content>
   </v-app>
 </template>
 
 <script>
+  import NavBar from '@/components/Navbar.vue'
 
-export default {
-  name: 'App',
-  components: {
-    //
-  },
-  data: () => ({
-    //
-  }),
-};
+  export default {
+    name: 'App',
+    components: {
+      NavBar
+    },
+    data: () => ({
+      //
+    })
+  }
 </script>
