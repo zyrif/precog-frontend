@@ -75,7 +75,7 @@
 <script>
 
   import axios from 'axios'
-  import { mapState, mapMutations } from 'vuex'
+  import { mapState, mapGetters, mapMutations } from 'vuex'
 
   export default {
     data () {
@@ -114,9 +114,13 @@
 
       // map vuex state
       ...mapState([
-        'deferredId',
-        'deferredStatus',
-        'deferredAPIUrl'
+        'videoId',
+        'videoStatus'
+      ]),
+      // map vues getters
+      ...mapGetters([
+        'apiStatusUrl',
+        'videoAPIUrl'
       ])
     },
     methods: {
@@ -135,7 +139,7 @@
           uploadFormData.append('video_file', this.video_file)
 
           axios
-            .post(this.deferredAPIUrl, uploadFormData, {
+            .post(this.videoAPIUrl, uploadFormData, {
               headers: {
                 'Content-type': 'multipart/form-data'
               }
@@ -152,8 +156,8 @@
                   setTimeout(() => {
                     // eslint-disable-next-line
                     console.log('Job id: ' + response.data.id)  // temp
-                    this.setDeferredId({ id: response.data.id })
-                    this.setDeferredStatus({ status: response.data.status })
+                    this.setVideoId({ id: response.data.id })
+                    this.setVideoStatus({ status: response.data.status })
                   }, 1000)
                 } else {
                   // eslint-disable-next-line
@@ -180,7 +184,7 @@
 
           //     // manually set status to 'uploaded' for now
           //     // this will be set according to the api return later
-          //     this.setDeferredStatus({ status: 'uploaded' })
+          //     this.setVideoStatus({ status: 'uploaded' })
           //   }, 1000)
           // }, 5000)
         }
@@ -188,8 +192,8 @@
 
       // map vuex mutations
       ...mapMutations([
-        'setDeferredId',
-        'setDeferredStatus'
+        'setVideoId',
+        'setVideoStatus'
       ])
     }
   }
