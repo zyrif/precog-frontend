@@ -1,28 +1,52 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import createPersistedState from 'vuex-persistedstate'
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    deferredId: -1,
-    deferredVideoUid: '',
-    deferredStatus: 'ready',
-    deferredAPIUrl: 'http://localhost:8000/api/video/'
+    authToken: '',
+    isLoggedIn: false,
+
+    videoId: -1,
+    videoStatus: 'ready',
+    baseAPIUrl: 'http://localhost:8000'
+  },
+  getters: {
+    apiStatusUrl (state) {
+      return state.baseAPIUrl + '/api/'
+    },
+    apiAuthTokenUrl (state) {
+      return state.baseAPIUrl + '/api/auth-token/'
+    },
+    videoAPIUrl (state) {
+      return state.baseAPIUrl + '/api/video/'
+    }
   },
   mutations: {
-    setDeferredId (state, payload) {
-      state.deferredId = payload.id
+    setAuthToken (state, payload) {
+      state.authToken = payload.token
+    },
+    setLoginState (state, payload) {
+      state.isLoggedIn = payload.state
     },
 
-    setDeferredStatus (state, payload) {
-      state.deferredStatus = payload.status
+    setVideoId (state, payload) {
+      state.videoId = payload.id
     },
-    setDeferredVideoUid (state, payload) {
-      state.deferredVideoUid = payload.deferredVideoUid
+
+    setVideoStatus (state, payload) {
+      state.videoStatus = payload.status
     }
   },
   actions: {
-
-  }
+    //
+  },
+  plugins: [
+    createPersistedState({
+      storage: window.sessionStorage
+    })
+  ]
 })
