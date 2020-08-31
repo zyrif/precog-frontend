@@ -17,6 +17,7 @@
       <v-btn
         text
         color="grey"
+        v-on:click="doSignOut"
       >
         <span>Sign Out</span>
         <v-icon right>
@@ -57,6 +58,8 @@
 </template>
 
 <script>
+  import { mapMutations } from 'vuex'
+
   export default {
     data () {
       return {
@@ -72,7 +75,22 @@
     methods: {
       toggleDrawer () {
         this.drawer = !this.drawer
-      }
+      },
+
+      doSignOut () {
+        this.setAuthToken({ token: '' })
+        this.setLoginState({ state: false })
+
+        sessionStorage.clear()
+
+        this.$router.go()
+      },
+
+      // map vuex mutations
+      ...mapMutations([
+        'setAuthToken',
+        'setLoginState'
+      ])
     }
   }
 </script>
