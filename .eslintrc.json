@@ -6,8 +6,8 @@
     },
     "extends": [
         "eslint:recommended",
-        "plugin:vue/essential",
-	"vuetify"
+        "plugin:vue/recommended",
+	    "vuetify"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -17,9 +17,6 @@
         "ecmaVersion": 2018,
         "sourceType": "module"
     },
-    "plugins": [
-        "vue"
-    ],
     "rules": {
         "vue/v-bind-style": "off",
         "vue/v-on-style": "off"
