@@ -1,0 +1,40 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"editor.tabSize": 4,
+		"[javascript]": {
+			"editor.tabSize": 2
+		  },
+		  "[json]": {
+			"editor.tabSize": 2
+		  },
+		  "[vue]": {
+			"editor.tabSize": 2
+		  },
+
+		"eslint.options": { "configFile": "D:\\WORKSPACE\\PrecogFrontend\\frontend\\.eslintrc.json" },
+		"eslint.validate": [
+			"javascript",
+			"javascriptreact",
+			"vue"
+		  ],
+		"eslint.workingDirectories": [
+			{"mode": "auto"}
+		],
+		"vetur.validation.template": false,
+		"material-icon-theme.activeIconPack": "vue_vuex",
+
+		// Settings-Sync settings
+		"sync.autoUpload": true,
+		"sync.gist": "45b41ae73f3f43415b163bd1cb5e56cd",
+		
+		// Enable forceUpload if gist has newer settings which you don't want
+		// Use whatever in case of identical settings
+		"sync.forceUpload": false,
+
+	}
+}
