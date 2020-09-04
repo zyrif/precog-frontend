@@ -23,6 +23,9 @@ export default new Vuex.Store({
     },
     videoAPIUrl (state) {
       return state.baseAPIUrl + '/api/video/'
+    },
+    authToken (state) {
+      return state.authToken
     }
   },
   mutations: {
