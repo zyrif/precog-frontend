@@ -119,6 +119,7 @@
       ]),
       // map vues getters
       ...mapGetters([
+        'authToken',
         'apiStatusUrl',
         'videoAPIUrl'
       ])
@@ -141,7 +142,8 @@
           axios
             .post(this.videoAPIUrl, uploadFormData, {
               headers: {
-                'Content-type': 'multipart/form-data'
+                'Content-type': 'multipart/form-data',
+                'Authorization': `token ${this.authToken}`
               }
             })
             .then(
