@@ -1,15 +1,28 @@
 <template>
-  <v-container
-    class="fill-height"
-  >
+  <v-container class="login-page">
     <v-row
-      align="center"
-      justify="end"
+      class="login-page-content"
     >
       <v-col
-        cols="12"
-        sm="8"
-        md="4"
+        class="login-page-description"
+      >
+        <p class="login-page-title">
+          Welcome to PRECOG!
+        </p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam harum possimus quod quasi explicabo provident, debitis exercitationem, perspiciatis mollitia autem, molestiae sed ducimus rerum. Veritatis dolorem a, error dolore voluptatem ex ullam voluptatibus modi id! Dolor fugiat minima fugit error, mollitia maxime incidunt sit, ex quas explicabo, ab tempore expedita!</p>
+        <v-btn
+          bottom
+          depressed
+          color="rgba(255, 0, 0, .6)"
+          dark
+          href="#"
+        >
+          See more
+        </v-btn>
+      </v-col>
+
+      <v-col
+        class="login-page-login"
       >
         <v-card
           class="elevation-2"
@@ -48,6 +61,7 @@
             <v-spacer />
             <v-btn
               class="mb-2 white--text"
+              outlined
               depressed
               block
               large
@@ -136,3 +150,25 @@
     }
   }
 </script>
+
+<style>
+  .login-page-title {
+    font-size: 3em;
+    font-weight: 700;
+  }
+  .login-page-login {
+    max-width: 370px;
+    min-width: 370px;
+  }
+  .login-page-content {
+    max-width: 1200px;
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-top: 10%;
+  }
+  .login-page {
+    background-color: #f2f2f2;
+    height: 100vh;
+  }
+
+</style>
