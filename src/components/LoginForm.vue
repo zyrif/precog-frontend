@@ -54,12 +54,14 @@
                 name="password"
                 type="password"
                 outlined
+                v-on:keydown="clickLoginBtn"
               />
             </v-form>
           </v-card-text>
           <v-card-actions>
             <v-spacer />
             <v-btn
+              ref="loginBtn"
               class="mb-2 white--text"
               outlined
               depressed
@@ -139,6 +141,11 @@
             })
         } else {
           //
+        }
+      },
+      clickLoginBtn (keyevent) {
+        if (keyevent.key === 'Enter') {
+          this.$refs.loginBtn.click()
         }
       },
 
