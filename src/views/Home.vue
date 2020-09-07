@@ -16,7 +16,7 @@
 
         <template v-slot:progress>
           <v-progress-linear
-            :height="10"
+            :height="5"
             indeterminate
           />
         </template>
