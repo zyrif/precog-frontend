@@ -8,6 +8,15 @@
         :loading="isLoading"
         class="elevation-1"
       >
+         <template v-slot:item.date="{item}">
+           <span v-if="item.date"> {{ new Date(item.date).toLocaleString() }} </span>
+           <span v-else> N/A </span>
+         </template>
+
+        <template v-slot:item.status="{item}">
+          <span> {{ item.status | capitalize }} </span>
+        </template>
+
         <template v-slot:no-data>
           <p class="display-1">
             No Data!
@@ -37,7 +46,13 @@
   import { mapGetters } from 'vuex'
 
   export default {
-    //
+    filters: {
+      capitalize: function (value) {
+        if (!value) return ''
+        value = value.toString()
+        return value.charAt(0).toUpperCase() + value.slice(1)
+      }
+    },
     data () {
       return {
         isLoading: true,
@@ -57,8 +72,8 @@
             value: 'date'
           },
           {
-            text: 'Status',
-            value: 'status'
+            text: 'File Name',
+            value: 'video_name'
           },
           {
             text: 'Length',
@@ -67,6 +82,15 @@
           {
             text: 'Size',
             value: 'video_size'
+          },
+          {
+
+            text: 'Frame Rate',
+            value: 'video_framerate'
+          },
+          {
+            text: 'Status',
+            value: 'status'
           }
         ]
 
@@ -91,8 +115,10 @@
           }
         )
         .catch(
-          // eslint-disable-next-line
-          console.log(response)
+          (respose) => {
+            // eslint-disable-next-line
+            console.log(response)
+          }
         )
     },
     methods: {
