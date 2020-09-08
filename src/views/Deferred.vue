@@ -25,19 +25,19 @@
 
     computed: {
       currentComponent () {
-        if (this.deferredStatus === 'uploaded' ||
-          this.deferredStatus === 'processing' ||
-          this.deferredStatus === 'initializing' ||
-          this.deferredStatus === 'error') {
+        if (this.videoStatus === 'uploaded' ||
+          this.videoStatus === 'processing' ||
+          this.videoStatus === 'initializing' ||
+          this.videoStatus === 'error') {
           return 'JobStatus'
-        } else if (this.deferredStatus === 'completed') {
+        } else if (this.videoStatus === 'completed') {
           return 'VideoPlayer'
         } else {
           return 'FileUpload'
         }
       },
       ...mapState([
-        'deferredStatus'
+        'videoStatus'
       ])
     }
   }

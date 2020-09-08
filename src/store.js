@@ -41,11 +41,9 @@ export default new Vuex.Store({
     setLoginState (state, payload) {
       state.isLoggedIn = payload.state
     },
-
     setVideoId (state, payload) {
       state.videoId = payload.id
     },
-
     setVideoStatus (state, payload) {
       state.videoStatus = payload.status
     }

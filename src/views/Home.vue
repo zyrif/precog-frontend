@@ -31,7 +31,7 @@
         </template>
 
         <template
-          v-if="!hasValues()"
+          v-if="!hasValues"
           v-slot:footer
         >
           <div />
@@ -56,6 +56,7 @@
     data () {
       return {
         isLoading: true,
+        refreshJob: '',
         items: []
       }
     },
@@ -97,6 +98,9 @@
         return values
       },
 
+      hasValues () {
+        return this.items.length > 0
+      },
       // map vuex getters
       ...mapGetters([
         'authToken',
@@ -104,26 +108,32 @@
       ])
     },
     mounted: function () {
-      axios
-        .get(this.videoAPIUrl, {
-          headers: { 'Authorization': `token ${this.authToken}` }
-        })
-        .then(
-          (response) => {
-            this.items = response.data
-            this.isLoading = false
-          }
-        )
-        .catch(
-          (respose) => {
-            // eslint-disable-next-line
-            console.log(response)
-          }
-        )
+      this.fetchData()
+      this.refreshJob = setInterval(() => {
+        this.fetchData()
+      }, 3000)
+    },
+    destroyed: function () {
+      clearInterval(this.refreshJob)
     },
     methods: {
-      hasValues () {
-        return this.items.length > 0
+      fetchData () {
+        axios
+          .get(this.videoAPIUrl, {
+            headers: { 'Authorization': `token ${this.authToken}` }
+          })
+          .then(
+            (response) => {
+              this.items = response.data
+              this.isLoading = false
+            }
+          )
+          .catch(
+            (respose) => {
+              // eslint-disable-next-line
+              console.log(response)
+            }
+          )
       }
     }
   }

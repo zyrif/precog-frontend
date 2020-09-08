@@ -14,7 +14,7 @@
         <video
           width="100%"
           controls
-          v-bind:src="deferredVideoUrl"
+          v-bind:src="videoDownloadUrl"
         />
       </v-col>
     </v-row>
@@ -23,17 +23,13 @@
 
 <script>
 
-  import { mapState } from 'vuex'
+  import { mapGetters } from 'vuex'
 
   export default {
     computed: {
-      ...mapState([
-        'deferredAPIUrl',
-        'deferredVideoUid'
-      ]),
-      deferredVideoUrl () {
-        return this.deferredAPIUrl + this.deferredVideoUid
-      }
+      ...mapGetters([
+        'videoDownloadUrl'
+      ])
     }
   }
 </script>

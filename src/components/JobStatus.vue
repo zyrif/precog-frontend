@@ -27,7 +27,7 @@
             />
           </v-layout>
           <p class="text-center display-1 mt-7 grey--text">
-            {{ deferredStatus | capitalize }}
+            {{ videoStatus | capitalize }}
           </p>
         </v-card>
       </v-col>
@@ -38,7 +38,7 @@
 <script>
   /* eslint-disable no-console */
   import axios from 'axios'
-  import { mapState, mapMutations } from 'vuex'
+  import { mapGetters, mapMutations } from 'vuex'
 
   export default {
     filters: {
@@ -49,28 +49,21 @@
       }
     },
     computed: {
-      ...mapState([
-        'deferredId',
-        'deferredStatus',
-        'deferredAPIUrl'
-      ]),
-      deferredJobUrl () {
-        return this.deferredAPIUrl + this.deferredId
-      }
+      ...mapGetters([
+        'videoDetailsUrl'
+      ])
     },
 
     mounted () {
       const refreshStatus = setInterval(() => {
         axios
-          .get(this.deferredJobUrl)
+          .get(this.videoDetailsUrl, {
+            headers: { 'Authorization': `token ${this.authToken}` }
+          })
           .then(
             (response) => {
               if (response.status === 200) {
-                this.setDeferredStatus({ status: response.data.status })
-                if (response.data.status === 'completed') {
-                  this.setDeferredVideoUid({ deferredVideoUid: response.data.video_id })
-                  clearInterval(refreshStatus)
-                }
+                this.setVideoStatus({ status: response.data.status })
               } else {
                 console.error("Can't reach API")
                 console.log(response)
@@ -95,8 +88,7 @@
     },
     methods: {
       ...mapMutations([
-        'setDeferredStatus',
-        'setDeferredVideoUid'
+        'setVideoStatus'
       ])
     }
   }
