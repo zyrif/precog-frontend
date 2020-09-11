@@ -24,6 +24,12 @@ export default new Vuex.Store({
     videoAPIUrl (state) {
       return state.baseAPIUrl + '/api/video/'
     },
+    videoDetailsUrl (state) {
+      return state.baseAPIUrl + '/api/video/' + state.videoId.toString()
+    },
+    videoDownloadUrl (state) {
+      return state.baseAPIUrl + '/api/video/' + state.videoId.toString() + '/download'
+    },
     authToken (state) {
       return state.authToken
     }
