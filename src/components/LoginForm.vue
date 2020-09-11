@@ -176,6 +176,7 @@
   .login-page {
     background-color: #f2f2f2;
     height: 100vh;
+    width: 100vw;
   }
 
 </style>
