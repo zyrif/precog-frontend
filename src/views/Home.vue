@@ -4,14 +4,14 @@
       <v-data-table
         :headers="headers"
         :items="items"
-        :item-key="id"
+        :item-key="items.id"
         :loading="isLoading"
         class="elevation-1"
       >
-         <template v-slot:item.date="{item}">
-           <span v-if="item.date"> {{ new Date(item.date).toLocaleString() }} </span>
-           <span v-else> N/A </span>
-         </template>
+        <template v-slot:item.date="{item}">
+          <span v-if="item.date"> {{ new Date(item.date).toLocaleString() }} </span>
+          <span v-else> N/A </span>
+        </template>
 
         <template v-slot:item.status="{item}">
           <span> {{ item.status | capitalize }} </span>
