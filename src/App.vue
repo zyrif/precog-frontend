@@ -5,7 +5,10 @@
       <router-view />
     </v-content>
   </v-app>
-  <v-app v-else>
+  <v-app
+    v-else
+    class="bgcolor"
+  >
     <login-form />
   </v-app>
 </template>
@@ -33,3 +36,9 @@
     }
   }
 </script>
+
+<style scoped>
+  .bgcolor {
+    background-color: #f2f2f2 !important;
+  }
+</style>

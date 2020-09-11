@@ -1,11 +1,7 @@
 <template>
   <v-container class="login-page">
-    <v-row
-      class="login-page-content"
-    >
-      <v-col
-        class="login-page-description"
-      >
+    <v-row>
+      <v-col>
         <p class="login-page-title">
           Welcome to PRECOG!
         </p>
@@ -21,9 +17,7 @@
         </v-btn>
       </v-col>
 
-      <v-col
-        class="login-page-login"
-      >
+      <v-col>
         <v-card
           class="elevation-2"
         >
@@ -162,21 +156,6 @@
   .login-page-title {
     font-size: 3em;
     font-weight: 700;
-  }
-  .login-page-login {
-    max-width: 370px;
-    min-width: 370px;
-  }
-  .login-page-content {
-    max-width: 1200px;
-    margin-left: 20%;
-    margin-right: 20%;
-    margin-top: 10%;
-  }
-  .login-page {
-    background-color: #f2f2f2;
-    height: 100vh;
-    width: 100vw;
   }
 
 </style>
