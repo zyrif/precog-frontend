@@ -1,7 +1,16 @@
 <template>
-  <v-container class="login-page">
-    <v-row>
-      <v-col>
+  <v-container
+    fluid
+    fill-height
+  >
+    <v-row
+      align="center"
+      justify="center"
+      class="mx-12"
+    >
+      <v-col
+        offset-md="1"
+      >
         <p class="login-page-title">
           Welcome to PRECOG!
         </p>
@@ -17,9 +26,13 @@
         </v-btn>
       </v-col>
 
-      <v-col>
+      <v-col
+        align="center"
+      >
         <v-card
           class="elevation-2"
+          min-width="360px"
+          max-width="460px"
         >
           <v-toolbar
             color="blue"
