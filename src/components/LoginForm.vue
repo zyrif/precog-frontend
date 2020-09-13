@@ -70,15 +70,13 @@
             <v-btn
               ref="loginBtn"
               class="mb-2 white--text"
-              outlined
               depressed
               block
               large
-              color="blue"
               v-bind="btnOptions"
               v-on:click="processLogin"
             >
-              Log In
+              {{ btnMessage }}
             </v-btn>
             <v-spacer />
           </v-card-actions>
@@ -99,9 +97,10 @@
         username: null,
         password: null,
 
+        btnEnabled: true,
         btnIsLoading: false,
-        btnError: false,
-        btnErrorMsg: '',
+        btnColor: 'blue',
+        btnMessage: 'LOG IN',
 
         rules: {
           required: value => !!value || 'Value Required'
@@ -111,19 +110,25 @@
     computed: {
       btnOptions () {
         const options = {
-          loading: this.btnIsLoading
-
+          loading: this.btnIsLoading,
+          disabled: !this.btnEnabled,
+          color: this.btnColor,
+          outlined: this.btnColor === 'blue'
         }
         return options
       },
 
       // map vuex getters
       ...mapGetters([
-        'apiAuthTokenUrl'
+        'authToken',
+        'apiAuthTokenUrl',
+        'apiStatusUrl'
       ])
     },
     methods: {
+      // TODO: change name to executeLogin()
       processLogin () {
+        // TODO: Remove this check, it is redundant
         if (this.username && this.password) {
           this.btnIsLoading = true
 
@@ -143,8 +148,18 @@
                 this.$router.replace('/')
               }
             })
-            .catch((response) => {
-              //
+            .catch((error) => {
+              if (error.response.status === 400) {
+                this.btnIsLoading = false
+                this.btnColor = 'error'
+                this.btnMessage = 'INVALID CREDENTIALS'
+                console.error(error.response.data)
+
+                setTimeout(() => {
+                  this.btnColor = 'blue'
+                  this.btnMessage = 'LOG IN'
+                }, 2500)
+              }
             })
         } else {
           //
@@ -169,6 +184,6 @@
   .login-page-title {
     font-size: 3em;
     font-weight: 700;
-  }
+}
 
 </style>
