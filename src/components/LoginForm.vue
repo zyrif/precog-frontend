@@ -149,16 +149,40 @@
               }
             })
             .catch((error) => {
-              if (error.response.status === 400) {
+              if (!error.status && error.message === 'Network Error') {
+                this.btnIsLoading = false
+                this.btnColor = 'error'
+                this.btnMessage = 'NETWORK OR API ERROR'
+
+                setTimeout(() => {
+                  this.btnColor = 'blue'
+                  this.btnMessage = 'LOG IN'
+                }, 5000)
+              } else if (error.response.status === 400) {
                 this.btnIsLoading = false
                 this.btnColor = 'error'
                 this.btnMessage = 'INVALID CREDENTIALS'
-                console.error(error.response.data)
 
                 setTimeout(() => {
                   this.btnColor = 'blue'
                   this.btnMessage = 'LOG IN'
                 }, 2500)
+              } else if (error.response.status > 400 && error.response.status <= 599) {
+                this.btnIsLoading = false
+                this.btnColor = 'error'
+                this.btnMessage = 'API ERROR'
+
+                setTimeout(() => {
+                  this.btnColor = 'blue'
+                  this.btnMessage = 'LOG IN'
+                }, 10000)
+              } else {
+                this.btnIsLoading = false
+                this.btnEnabled = false
+                this.btnColor = 'error'
+                this.btnMessage = 'ERROR'
+                //
+                console.info(error.message)
               }
             })
         } else {
