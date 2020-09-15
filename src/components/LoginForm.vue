@@ -191,7 +191,7 @@
       },
       clickLoginBtn (keyevent) {
         if (keyevent.key === 'Enter') {
-          this.$refs.loginBtn.click()
+          this.$refs.loginBtn.$el.click()
         }
       },
 
