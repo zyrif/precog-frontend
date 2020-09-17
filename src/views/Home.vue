@@ -64,12 +64,8 @@
       headers () {
         const values = [
           {
-            text: 'ID',
-            align: 'start',
-            value: 'id'
-          },
-          {
             text: 'Date',
+            align: 'start',
             value: 'date'
           },
           {
@@ -85,7 +81,6 @@
             value: 'video_size'
           },
           {
-
             text: 'Frame Rate',
             value: 'video_framerate'
           },
