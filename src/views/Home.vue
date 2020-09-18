@@ -62,6 +62,9 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+      <delete-dialog
+        ref="refDeleteDialog"
+      />
       <v-data-table
         :headers="tableHeaders"
         :items="tableRowItems"
@@ -100,55 +103,23 @@
         </template>
 
         <template v-slot:item.actions="{item}">
-          <v-dialog
-            v-model="sessionDeleteDialog"
-            width="290"
+          <v-btn
+            depressed
+            fab
+            small
+            height="24"
+            width="24"
+            color="pink"
           >
-            <template v-slot:activator="{on}">
-              <v-btn
-                depressed
-                fab
-                small
-                height="24"
-                width="24"
-                color="pink"
-              >
-                <v-icon
-                  small
-                  class="mx-2"
-                  color="white"
-                  v-on.stop="on"
-                >
-                  mdi-delete
-                </v-icon>
-              </v-btn>
-            </template>
-            <v-card>
-              <v-card-title class="headline">
-                Are you sure?
-              </v-card-title>
-              <v-card-text>
-                This action is unreversible. Deleting the job session will delete associated video files and data.
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer />
-                <v-btn
-                  color="blue darken-1"
-                  text
-                  v-on:click="sessionDeleteDialog = false"
-                >
-                  Cancel
-                </v-btn>
-                <v-btn
-                  color="blue darken-1"
-                  text
-                  v-on:click="deleteSession (item)"
-                >
-                  Proceed
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
+            <v-icon
+              small
+              class="mx-2"
+              color="white"
+              v-on:click="deleteSession(item)"
+            >
+              mdi-delete
+            </v-icon>
+          </v-btn>
         </template>
 
         <template v-slot:no-data>
@@ -171,8 +142,12 @@
 <script>
   import axios from 'axios'
   import { mapGetters } from 'vuex'
+  import DeleteDialog from '@/components/custom/DeleteDialog'
 
   export default {
+    components: {
+      DeleteDialog
+    },
     filters: {
       capitalize: function (value) {
         if (!value) return ''
@@ -308,14 +283,20 @@
       },
 
       deleteSession (item) {
-        this.sessionDeleteDialog = false
-        if (item.id && item.id > 0) {
-          console.info('Called deleteSession with item: ')
-          console.info(item)
-        } else {
-          console.warn('Invalid id in deleteSession: ')
-          console.warn(item)
-        }
+        // this.sessionDeleteDialog = false
+        this
+          .$refs
+          .refDeleteDialog
+          .open()
+          .then(result => {
+            if (result) {
+              if (item.id && item.id > 0) {
+                console.info('Called deleteSession with item: ', item)
+              } else {
+                console.warn('Invalid id in deleteSession: ', item)
+              }
+            }
+          })
       },
 
       // * File Upload Methods
