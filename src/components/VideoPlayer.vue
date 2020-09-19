@@ -6,15 +6,15 @@
       <v-col
         cols="12"
         xs="12"
-        sm="9"
-        md="8"
-        lg="6"
-        xl="4"
+        sm="10"
+        md="10"
+        lg="10"
+        xl="9"
       >
         <video
           width="100%"
           controls
-          v-bind:src="videoDownloadUrl"
+          v-bind:src="videoLink"
         />
       </v-col>
     </v-row>
@@ -23,13 +23,12 @@
 
 <script>
 
-  import { mapGetters } from 'vuex'
-
   export default {
-    computed: {
-      ...mapGetters([
-        'videoDownloadUrl'
-      ])
+    props: {
+      videoLink: {
+        type: String,
+        default: ''
+      }
     }
   }
 </script>

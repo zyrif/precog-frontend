@@ -65,6 +65,15 @@
       <delete-dialog
         ref="refDeleteDialog"
       />
+      <v-dialog
+        v-model="videoPlayerDialog"
+      >
+        <v-card
+          color="black"
+        >
+          <video-player v-bind:video-link="videoLink" />
+        </v-card>
+      </v-dialog>
       <v-data-table
         :headers="tableHeaders"
         :items="tableRowItems"
@@ -103,23 +112,55 @@
         </template>
 
         <template v-slot:item.actions="{item}">
-          <v-btn
-            depressed
-            fab
-            small
-            height="24"
-            width="24"
-            color="pink"
+          <v-container
+            class="pa-0"
           >
-            <v-icon
-              small
-              class="mx-2"
-              color="white"
-              v-on:click="deleteSession(item)"
-            >
-              mdi-delete
-            </v-icon>
-          </v-btn>
+            <v-row>
+              <v-col
+                class="px-1"
+              >
+                <v-btn
+                  v-if="item.status === 'completed'"
+                  depressed
+                  fab
+                  small
+                  height="24"
+                  width="24"
+                  color="teal accent-3"
+                >
+                  <v-icon
+                    small
+                    class="mx-2"
+                    color="white"
+                    v-on:click="openPlayer(item)"
+                  >
+                    mdi-play
+                  </v-icon>
+                </v-btn>
+              </v-col>
+              <v-col
+                class="px-1"
+              >
+                <v-btn
+                  depressed
+                  fab
+                  small
+                  height="24"
+                  width="24"
+                  color="pink lighten-1"
+                >
+                  <v-icon
+                    small
+                    class="mx-2"
+                    color="white"
+                    v-on:click="deleteSession(item)"
+                  >
+                    mdi-delete
+                  </v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-container>
         </template>
 
         <template v-slot:no-data>
@@ -142,11 +183,14 @@
 <script>
   import axios from 'axios'
   import { mapGetters } from 'vuex'
+
   import DeleteDialog from '@/components/custom/DeleteDialog'
+  import VideoPlayer from '@/components/VideoPlayer'
 
   export default {
     components: {
-      DeleteDialog
+      DeleteDialog,
+      VideoPlayer
     },
     filters: {
       capitalize: function (value) {
@@ -161,6 +205,7 @@
         tableIsLoading: true,
         uploadDialog: false,
         sessionDeleteDialog: false,
+        videoPlayerDialog: false,
         tableRefreshJob: '',
         tableRowItems: [],
 
@@ -177,7 +222,10 @@
 
         // Button options
         fileUploadBtnIsLoading: false,
-        fileUploadBtnIsDisabled: false
+        fileUploadBtnIsDisabled: false,
+
+        // * Video Player Values
+        videoLink: ''
       }
     },
     computed: {
@@ -212,7 +260,7 @@
           {
             text: 'Actions',
             value: 'actions',
-            align: 'end',
+            align: 'center',
             sortable: false,
             filterable: false,
             groupable: false
@@ -297,6 +345,12 @@
               }
             }
           })
+      },
+
+      openPlayer (item) {
+        this.videoLink = this.videoAPIUrl + item.id.toString() + '/download'
+
+        this.videoPlayerDialog = true
       },
 
       // * File Upload Methods
