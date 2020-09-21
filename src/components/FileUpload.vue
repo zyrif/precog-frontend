@@ -1,140 +1,127 @@
 <template>
-  <v-container
-    class="fill-height"
+  <v-card
+    class="elevation-2"
   >
-    <v-row
-      align="center"
-      justify="center"
+    <v-toolbar
+      color="blue"
+      dark
+      flat
     >
-      <v-col
-        cols="12"
-        sm="8"
-        md="4"
-      >
-        <v-card
-          class="elevation-2"
+      <v-toolbar-title>
+        Upload Video File
+      </v-toolbar-title>
+    </v-toolbar>
+    <v-card-text>
+      <v-form>
+        <v-file-input
+          v-model="video_file"
+          class="mt-6"
+          color="blue"
+          show-size
+          accept="video/*"
+          label="Select Video File"
+          placeholder="Click Here to Select"
+          prepend-icon="mdi-movie-outline"
+          outlined
+          v-bind="fileInputOptions"
+          v-bind:display-size="1000"
         >
-          <v-toolbar
-            color="blue"
-            dark
-            flat
-          >
-            <v-toolbar-title>
-              Upload Pre-Recorded Video
-            </v-toolbar-title>
-          </v-toolbar>
-          <v-card-text>
-            <v-form>
-              <v-file-input
-                v-model="video_file"
-                class="mt-6"
-                color="blue"
-                show-size
-                accept="video/*"
-                label="Select Video File"
-                placeholder="Click Here to Select"
-                prepend-icon="mdi-movie-outline"
-                outlined
-                v-bind="inputOptions"
-                v-bind:display-size="1000"
-              >
-                <template v-slot:selection="{ text }">
-                  <v-chip
-                    color="blue"
-                    dark
-                    label
-                    small
-                  >
-                    {{ text }}
-                  </v-chip>
-                </template>
-              </v-file-input>
-            </v-form>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer />
-            <v-btn
-              class="mb-2 white--text"
-              depressed
-              block
-              large
+          <template v-slot:selection="{ text }">
+            <v-chip
               color="blue"
-              v-bind="btnOptions"
-              v-on:click="processUpload"
+              dark
+              label
+              small
             >
-              Upload
-            </v-btn>
-            <v-spacer />
-          </v-card-actions>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+              {{ text }}
+            </v-chip>
+          </template>
+        </v-file-input>
+      </v-form>
+    </v-card-text>
+    <v-card-actions>
+      <v-spacer />
+      <v-btn
+        class="mb-2 white--text"
+        depressed
+        block
+        large
+        color="blue"
+        v-bind="fileUploadBtnOptions"
+        v-on:click="processUpload"
+      >
+        Upload
+      </v-btn>
+      <v-spacer />
+    </v-card-actions>
+  </v-card>
 </template>
 
 <script>
 
   import axios from 'axios'
-  import { mapState, mapGetters, mapMutations } from 'vuex'
+  import { mapGetters } from 'vuex'
 
   export default {
+    name: 'FileUpload',
     data () {
       return {
+        // * File Upload Options
         video_file: null,
 
         // File Input options
-        inputIsLoading: false,
-        inputIsSuccess: false,
-        inputMessages: [],
-        inputSuccessMessages: [],
+        fileInputIsLoading: false,
+        fileInputIsSuccess: false,
+        fileInputIsError: false,
+        fileInputMessages: [],
+        fileInputSuccessMessages: [],
+        fileInputErrorMessages: [],
 
         // Button options
-        btnIsLoading: false,
-        btnIsDisabled: false
-
+        fileUploadBtnIsLoading: false,
+        fileUploadBtnIsDisabled: false
       }
     },
     computed: {
-      inputOptions () {
+      // * File Upload Properties
+      fileInputOptions () {
         const options = {
-          loading: this.inputIsLoading,
-          messages: this.inputMessages,
-          success: this.inputIsSuccess,
-          successMessages: this.inputSuccessMessages
+          loading: this.fileInputIsLoading,
+          messages: this.fileInputMessages,
+          success: this.fileInputIsSuccess,
+          successMessages: this.fileInputSuccessMessages,
+          error: this.fileInputIsError,
+          errorMessages: this.fileInputErrorMessages
         }
         return options
       },
-      btnOptions () {
+      fileUploadBtnOptions () {
         const options = {
-          loading: this.btnIsLoading,
-          disabled: this.btnIsDisabled
+          loading: this.fileUploadBtnIsLoading,
+          disabled: this.fileUploadBtnIsDisabled
         }
         return options
       },
 
-      // map vuex state
-      ...mapState([
-        'videoId',
-        'videoStatus'
-      ]),
-      // map vues getters
+      // map vuex getters
       ...mapGetters([
         'authToken',
-        'apiStatusUrl',
         'videoAPIUrl'
       ])
     },
     methods: {
+      // * File Upload Methods
+
       processUpload () {
         if (this.video_file == null) {
-          this.inputMessages = 'No File to Upload'
+          this.fileInputMessages = 'No File to Upload'
 
           setTimeout(() => {
-            this.inputMessages = []
+            this.fileInputMessages = []
           }, 2000)
         } else {
-          this.inputIsLoading = true
-          this.btnIsDisabled = true
+          this.fileInputIsLoading = true
+          this.fileUploadBtnIsDisabled = true
 
           let uploadFormData = new FormData()
           uploadFormData.append('video_file', this.video_file)
@@ -148,55 +135,55 @@
             })
             .then(
               (response) => {
-                this.inputIsLoading = false
-                this.btnIsDisabled = false
+                this.fileInputIsLoading = false
 
                 if (response.status === 201) {
-                  this.inputIsSuccess = true
-                  this.inputSuccessMessages = 'File Upload Succeeded!'
+                  this.fileInputIsSuccess = true
+                  this.fileInputSuccessMessages = 'File Upload Succeeded!'
 
                   setTimeout(() => {
-                    // eslint-disable-next-line
-                    console.log('Job id: ' + response.data.id)  // temp
-                    this.setVideoId({ id: response.data.id })
-                    this.setVideoStatus({ status: response.data.status })
-                  }, 1000)
+                    this.$emit('closeDialog')
+                    this.video_file = null
+                    this.fileUploadBtnIsDisabled = false
+
+                    this.fileInputIsSuccess = false
+                    this.fileInputSuccessMessages = []
+                    // console.log('Job id: ' + response.data.id)  // temp
+                    // this.setVideoId({ id: response.data.id })
+                    // this.setVideoStatus({ status: response.data.status })
+                  }, 2000)
                 } else {
-                  // eslint-disable-next-line
-                  console.log(response)
+                  this.fileInputIsError = true
+                  this.fileInputErrorMessages = ['Upload Failed']
+                  console.warn(response)
+
+                  setTimeout(() => {
+                    this.video_file = null
+                    this.fileUploadBtnIsDisabled = false
+
+                    this.fileInputIsError = false
+                    this.fileInputErrorMessages = []
+                  }, 3000)
                 }
               }
             )
             .catch(
-              // eslint-disable-next-line
-              (error) => console.error(error)
+              (error) => {
+                this.fileInputIsLoading = false
+                this.fileInputIsError = true
+                this.fileInputErrorMessages = error.message
+
+                setTimeout(() => {
+                  this.video_file = null
+                  this.fileUploadBtnIsDisabled = false
+
+                  this.fileInputIsError = false
+                  this.fileInputErrorMessages = []
+                }, 3000)
+              }
             )
-
-          // setTimeout(() => {
-          //   this.inputIsLoading = false
-          //   this.btnIsDisabled = false
-
-          //   // success condtion
-          //   this.inputIsSuccess = true
-          //   this.inputSuccessMessages = 'File Upload Succeeded!'
-
-          //   setTimeout(() => {
-          //     this.inputIsSuccess = false
-          //     this.inputSuccessMessages = []
-
-          //     // manually set status to 'uploaded' for now
-          //     // this will be set according to the api return later
-          //     this.setVideoStatus({ status: 'uploaded' })
-          //   }, 1000)
-          // }, 5000)
         }
-      },
-
-      // map vuex mutations
-      ...mapMutations([
-        'setVideoId',
-        'setVideoStatus'
-      ])
+      }
     }
   }
 </script>
