@@ -142,7 +142,7 @@
                   this.fileInputSuccessMessages = 'File Upload Succeeded!'
 
                   setTimeout(() => {
-                    this.$emit('closeDialog')
+                    this.$emit('toggleDialog')
                     this.video_file = null
                     this.fileUploadBtnIsDisabled = false
 
