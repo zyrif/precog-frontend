@@ -40,7 +40,7 @@
             <v-progress-linear
               absolute
               height="2"
-              v-bind:indeterminate="fileUploadProgress <= 5"
+              v-bind:indeterminate="fileUploadProgress <= 0"
               v-bind:value="fileUploadProgress"
             />
           </template>
@@ -50,6 +50,7 @@
     <v-card-actions>
       <v-spacer />
       <v-btn
+        v-if="!fileInputIsLoading"
         class="mb-2 white--text"
         depressed
         block
@@ -60,6 +61,18 @@
       >
         Upload
       </v-btn>
+      <v-btn
+        v-else
+        class="mb-2 white--text"
+        depressed
+        block
+        large
+        color="warning"
+        v-bind="fileUploadBtnOptions"
+        v-on:click="cancelUpload"
+      >
+        Cancel Upload
+      </v-btn>
       <v-spacer />
     </v-card-actions>
   </v-card>
@@ -69,6 +82,9 @@
 
   import axios from 'axios'
   import { mapGetters } from 'vuex'
+
+  const CancelToken = axios.CancelToken
+  let axiosCancelPromise
 
   export default {
     name: 'FileUpload',
@@ -85,9 +101,8 @@
         fileInputSuccessMessages: [],
         fileInputErrorMessages: [],
 
-        // Button options
-        fileUploadBtnIsLoading: false,
-        fileUploadBtnIsDisabled: false,
+        // File Upload Btn options
+        fileUploadBtnDisabled: false,
 
         // Progressbar Options
         fileUploadProgress: 0
@@ -106,10 +121,10 @@
         }
         return options
       },
+
       fileUploadBtnOptions () {
         const options = {
-          loading: this.fileUploadBtnIsLoading,
-          disabled: this.fileUploadBtnIsDisabled
+          disabled: this.fileUploadBtnDisabled
         }
         return options
       },
@@ -125,14 +140,13 @@
 
       processUpload () {
         if (this.video_file == null) {
-          this.fileInputMessages = 'No File to Upload'
+          this.fileInputMessages = ['No File to Upload']
 
           setTimeout(() => {
             this.fileInputMessages = []
           }, 2000)
         } else {
           this.fileInputIsLoading = true
-          this.fileUploadBtnIsDisabled = true
 
           let uploadFormData = new FormData()
           uploadFormData.append('video_file', this.video_file)
@@ -145,16 +159,16 @@
               },
               onUploadProgress: (progressEvent) => {
                 this.fileUploadProgress = Math.ceil((progressEvent.loaded / progressEvent.total) * 100)
-              }
+              },
+              cancelToken: new CancelToken(function executor (c) {
+                axiosCancelPromise = c
+              })
             })
             .then(
               (response) => {
-                this.fileInputIsLoading = false
-                this.fileUploadProgress = 0
-
                 if (response.status === 201) {
                   this.fileInputIsSuccess = true
-                  this.fileInputSuccessMessages = 'File Upload Succeeded!'
+                  this.fileInputSuccessMessages = ['File Upload Succeeded!']
 
                   setTimeout(() => {
                     this.$emit('toggleDialog')
@@ -168,17 +182,24 @@
             )
             .catch(
               (error) => {
-                this.fileInputIsLoading = false
-                this.fileInputIsError = true
-                this.fileInputErrorMessages = error.message
+                if (axios.isCancel(error)) {
+                  this.fileInputMessages = ['Upload Cancelled By User']
+                } else {
+                  this.fileInputIsError = true
+                  this.fileInputErrorMessages = error.message
+                }
               }
             )
             .finally(
               _ => {
-                setTimeout(() => {
-                  this.video_file = null
-                  this.fileUploadBtnIsDisabled = false
+                this.video_file = null
+                this.fileUploadBtnDisabled = true
+                this.fileInputIsLoading = false
+                this.fileUploadProgress = 0
 
+                setTimeout(() => {
+                  this.fileUploadBtnDisabled = false
+                  this.fileInputMessages = []
                   this.fileInputIsSuccess = false
                   this.fileInputSuccessMessages = []
                   this.fileInputIsError = false
@@ -187,6 +208,9 @@
               }
             )
         }
+      },
+      cancelUpload () {
+        axiosCancelPromise()
       }
     }
   }
