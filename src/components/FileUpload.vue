@@ -36,6 +36,14 @@
               {{ text }}
             </v-chip>
           </template>
+          <template v-slot:progress>
+            <v-progress-linear
+              absolute
+              height="2"
+              v-bind:indeterminate="fileUploadProgress <= 5"
+              v-bind:value="fileUploadProgress"
+            />
+          </template>
         </v-file-input>
       </v-form>
     </v-card-text>
@@ -79,7 +87,10 @@
 
         // Button options
         fileUploadBtnIsLoading: false,
-        fileUploadBtnIsDisabled: false
+        fileUploadBtnIsDisabled: false,
+
+        // Progressbar Options
+        fileUploadProgress: 0
       }
     },
     computed: {
@@ -131,11 +142,15 @@
               headers: {
                 'Content-type': 'multipart/form-data',
                 'Authorization': `token ${this.authToken}`
+              },
+              onUploadProgress: (progressEvent) => {
+                this.fileUploadProgress = Math.ceil((progressEvent.loaded / progressEvent.total) * 100)
               }
             })
             .then(
               (response) => {
                 this.fileInputIsLoading = false
+                this.fileUploadProgress = 0
 
                 if (response.status === 201) {
                   this.fileInputIsSuccess = true
