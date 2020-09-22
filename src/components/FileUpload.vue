@@ -158,27 +158,11 @@
 
                   setTimeout(() => {
                     this.$emit('toggleDialog')
-                    this.video_file = null
-                    this.fileUploadBtnIsDisabled = false
-
-                    this.fileInputIsSuccess = false
-                    this.fileInputSuccessMessages = []
-                    // console.log('Job id: ' + response.data.id)  // temp
-                    // this.setVideoId({ id: response.data.id })
-                    // this.setVideoStatus({ status: response.data.status })
-                  }, 2000)
+                  }, 2500)
                 } else {
                   this.fileInputIsError = true
                   this.fileInputErrorMessages = ['Upload Failed']
                   console.warn(response)
-
-                  setTimeout(() => {
-                    this.video_file = null
-                    this.fileUploadBtnIsDisabled = false
-
-                    this.fileInputIsError = false
-                    this.fileInputErrorMessages = []
-                  }, 3000)
                 }
               }
             )
@@ -187,11 +171,16 @@
                 this.fileInputIsLoading = false
                 this.fileInputIsError = true
                 this.fileInputErrorMessages = error.message
-
+              }
+            )
+            .finally(
+              _ => {
                 setTimeout(() => {
                   this.video_file = null
                   this.fileUploadBtnIsDisabled = false
 
+                  this.fileInputIsSuccess = false
+                  this.fileInputSuccessMessages = []
                   this.fileInputIsError = false
                   this.fileInputErrorMessages = []
                 }, 3000)
