@@ -26,6 +26,22 @@
         v-on:openPlayer="openPlayer"
         v-on:toggleDialog="toggleUploadDialog"
       />
+      <v-snackbar
+        v-model="snackbarVisible"
+        v-bind:timeout="5000"
+      >
+        {{ snackbarText }}
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            v-bind:color="snackbarColor"
+            text
+            v-bind="attrs"
+            v-on:click="snackbarVisible = false"
+          >
+            Dismiss
+          </v-btn>
+        </template>
+      </v-snackbar>
     </v-container>
   </div>
 </template>
@@ -37,6 +53,7 @@
   import VideoPlayer from '@/components/VideoPlayer'
   import FileUpload from '@/components/FileUpload'
   import SessionTable from '@/components/SessionTable'
+  import Axios from 'axios'
 
   export default {
     components: {
@@ -49,7 +66,12 @@
       return {
         uploadDialog: false,
         videoPlayerDialog: false,
-        videoLink: ''
+        videoLink: '',
+
+        // snackbar
+        snackbarVisible: false,
+        snackbarColor: 'primary',
+        snackbarText: ''
       }
     },
     computed: {
@@ -73,7 +95,29 @@
           .then(result => {
             if (result) {
               if (item.id && item.id > 0) {
-                console.info('Called deleteSession with item: ', item)
+                Axios
+                  .delete(`${this.videoAPIUrl}${item.id}/`, {
+                    headers: { 'Authorization': `token ${this.authToken}` }
+                  })
+                  .then((response) => {
+                    if (response.status === 200) {
+                      this.snackbarText = 'Successfully Deleted'
+                      this.snackbarColor = 'success'
+                    } else {
+                      this.snckbarText = `Error: ${response.data.error}`
+                      this.snackbarColor = 'error'
+                    }
+                    this.snackbarVisible = true
+                  })
+                  .catch((error) => {
+                    if (error.response) {
+                      this.snackbarText = `Error: ${error.response.data.error}`
+                    } else {
+                      this.snackbarText = error.message
+                    }
+                    this.snackbarColor = 'error'
+                    this.snackbarVisible = true
+                  })
               } else {
                 console.warn('Invalid id in deleteSession: ', item)
               }
